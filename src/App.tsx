@@ -3,14 +3,14 @@ import logo from './logo.svg';
 import './App.css';
 import {Capacitor, Plugins} from '@capacitor/core';
 
-const {CordovaPurchase} = Plugins;
+const {CdvPurchase} = Plugins;
 
 const productId = "pwa_inapp_pro_9_99"
 
 function App() {
     async function getPurchasedProduct(productId: string) {
         try {
-            const products = await CordovaPurchase.getProducts([productId]);
+            const products = await CdvPurchase.store.getProducts([productId]);
             // const product = result.products[0];
             // await CordovaPurchase.purchase(product);
             console.log(`products: ${products.join(';')}`);
@@ -24,7 +24,7 @@ function App() {
         getPurchasedProduct(productId).then(() => console.log("products fetched successfully"))
     }
 
-    console.log(`Platform: ${Capacitor.isNativePlatform()}`)
+    console.log(`Native Platform? ${Capacitor.isNativePlatform()}`)
     return (
         <div className="App">
             <header className="App-header">
