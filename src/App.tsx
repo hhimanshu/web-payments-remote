@@ -77,15 +77,15 @@ function App() {
             store.initialize([Platform.GOOGLE_PLAY, Platform.APPLE_APPSTORE])
                 .then(() => {
                     console.log('store is ready', store.products);
-                    //setPurchasableProducts(store.products.filter(p => p.canPurchase))
+                    setPurchasableProducts(store.products.filter(p => p.canPurchase))
                     console.log("fetching products")
-                    getPurchasedProduct(productId).then(() => console.log("products fetched successfully"))
+                    // getPurchasedProduct(productId).then(() => console.log("products fetched successfully"))
                 });
         })
 
     }, [])
 
-    async function getPurchasedProduct(productId: string) {
+    /*async function getPurchasedProduct(productId: string) {
         try {
             const products = store.products;
             // const product = result.products[0];
@@ -94,7 +94,7 @@ function App() {
         } catch (error) {
             console.error(error);
         }
-    }
+    }*/
 
     const placeOrderOnNativeStore = (product: CdvPurchase.Product) => {
         console.log(`placing order for productId=${product.id}`)
@@ -115,18 +115,22 @@ function App() {
         <div className="App">
             <header className="App-header">
                 <Box>
-                    {Capacitor.isNativePlatform() && productsOwned && <Box>
-                        {Array.from(productsOwned.values()).map(p => {
-                            return <DisplayPurchasedProduct product={p}/>
-                        })}
-                    </Box>
-                    }
-                    {purchasableProducts && <Box>
+                    {Capacitor.isNativePlatform() && productsOwned && <>
+                        <Box>
+                            {Array.from(productsOwned.values()).map(p => {
+                                return <DisplayPurchasedProduct product={p}/>
+                            })}
+
+                        </Box>
+                        purchasableProducts && <Box>
                         {purchasableProducts
                             .filter(p => p.canPurchase)
                             .map(product => <DisplayPurchasableProduct product={product}
                                                                        onClick={placeOrderOnNativeStore}/>)}
-                    </Box>}
+                    </Box>
+                    </>
+                    }
+
                 </Box>
                 {!Capacitor.isNativePlatform() &&
                     <WebPaymentCard onClick={() => console.log("Sending to stripe")}/>}
