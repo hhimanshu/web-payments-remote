@@ -1,8 +1,8 @@
 import {CapacitorConfig} from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-    appId: "com.bonsaiilabs.web_payments_remote",
-    appName: "web-payments-remote",
+    appId: "com.bonsaiilabs.webpwapayments",
+    appName: "PWA Builder In App Purchase",
     webDir: 'build',
     bundledWebRuntime: false,
     server: {
