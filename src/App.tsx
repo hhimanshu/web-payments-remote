@@ -1,9 +1,9 @@
 import React, {useEffect} from 'react';
 import logo from './logo.svg';
 import './App.css';
-import {Capacitor} from '@capacitor/core';
+import {Capacitor, Plugins} from '@capacitor/core';
 import 'cordova-plugin-purchase';
-//const {CdvPurchase} = Plugins;
+const {CdvPurchase} = Plugins;
 const {store, ProductType, Platform, LogLevel} = CdvPurchase;
 
 const productId = "pwa_inapp_pro_9_99"
@@ -27,14 +27,14 @@ function App() {
                 }
             ]);
 
-            store.error(e => {
+            store.error((e: any) => {
                 console.log('error', e);
             });
 
             store.when()
-                .approved(transaction => transaction.verify())
-                .verified(receipt => receipt.finish())
-                .finished(transaction => console.log('Products owned: ' + transaction.products.map(p => p.id).join(',')))
+                .approved((transaction: { verify: () => any; }) => transaction.verify())
+                .verified((receipt: { finish: () => any; }) => receipt.finish())
+                .finished((transaction: { products: any[]; }) => console.log('Products owned: ' + transaction.products.map(p => p.id).join(',')))
                 //.receiptUpdated(r => updatePurchases(r))
                 //.productUpdated(p => updateUI(p));
 
