@@ -3,14 +3,14 @@ import logo from './logo.svg';
 import './App.css';
 import {Capacitor, Plugins} from '@capacitor/core';
 
-const {CdvPurchase} = Plugins;
+const {CordovaPurchase} = Plugins;
 
 const productId = "pwa_inapp_pro_9_99"
 
 function App() {
     async function getPurchasedProduct(productId: string) {
         try {
-            const products = await CdvPurchase.store.getProducts([productId]);
+            const products = await CordovaPurchase.getProducts([productId]);
             // const product = result.products[0];
             // await CordovaPurchase.purchase(product);
             console.log(`products: ${products.join(';')}`);
