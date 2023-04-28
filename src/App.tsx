@@ -1,27 +1,66 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import logo from './logo.svg';
 import './App.css';
-import {Capacitor, Plugins} from '@capacitor/core';
-
-const {CordovaPurchase} = Plugins;
+import {Capacitor} from '@capacitor/core';
+import 'cordova-plugin-purchase';
+//const {CdvPurchase} = Plugins;
+const {store, ProductType, Platform, LogLevel} = CdvPurchase;
 
 const productId = "pwa_inapp_pro_9_99"
 
 function App() {
+
+    useEffect(() => {
+        document.addEventListener("deviceready", () => {
+            store.verbosity = LogLevel.DEBUG;
+
+            store.register([
+                {
+                    type: ProductType.NON_CONSUMABLE,
+                    id: productId,
+                    platform: Platform.GOOGLE_PLAY,
+                },
+                {
+                    type: ProductType.NON_CONSUMABLE,
+                    id: productId,
+                    platform: Platform.APPLE_APPSTORE,
+                }
+            ]);
+
+            store.error(e => {
+                console.log('error', e);
+            });
+
+            store.when()
+                .approved(transaction => transaction.verify())
+                .verified(receipt => receipt.finish())
+                .finished(transaction => console.log('Products owned: ' + transaction.products.map(p => p.id).join(',')))
+                //.receiptUpdated(r => updatePurchases(r))
+                //.productUpdated(p => updateUI(p));
+
+            store.ready(() => {
+                console.log('ready', store.products);
+            });
+
+            store.initialize([Platform.GOOGLE_PLAY, Platform.APPLE_APPSTORE])
+                .then(() => {
+                    console.log('store is ready', store.products);
+                    //setPurchasableProducts(store.products.filter(p => p.canPurchase))
+                    console.log("fetching products")
+                    getPurchasedProduct(productId).then(() => console.log("products fetched successfully"))
+                });
+        })
+
+    }, [])
     async function getPurchasedProduct(productId: string) {
         try {
-            const products = await CordovaPurchase.getProducts([productId]);
+            const products = store.products;
             // const product = result.products[0];
             // await CordovaPurchase.purchase(product);
             console.log(`products: ${products.join(';')}`);
         } catch (error) {
             console.error(error);
         }
-    }
-
-    if (Capacitor.isNativePlatform()) {
-        console.log("fetching products")
-        getPurchasedProduct(productId).then(() => console.log("products fetched successfully"))
     }
 
     console.log(`Native Platform? ${Capacitor.isNativePlatform()}`)
