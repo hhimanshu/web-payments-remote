@@ -1,8 +1,12 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
+import 'cordova-plugin-purchase';
+import {Capacitor} from "@capacitor/core";
 
 function App() {
+  const {store} = CdvPurchase;
+  console.log(`Platform: ${Capacitor.isNativePlatform()}, Store Version: ${store.version}`)
   return (
     <div className="App">
       <header className="App-header">
