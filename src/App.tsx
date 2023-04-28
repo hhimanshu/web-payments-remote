@@ -1,15 +1,13 @@
 import React, {useEffect} from 'react';
 import logo from './logo.svg';
 import './App.css';
-import {Capacitor, Plugins} from '@capacitor/core';
+import {Capacitor} from '@capacitor/core';
 import 'cordova-plugin-purchase';
-const {CdvPurchase} = Plugins;
-const {store, ProductType, Platform, LogLevel} = CdvPurchase;
 
 const productId = "pwa_inapp_pro_9_99"
 
 function App() {
-
+    const {store, ProductType, Platform, LogLevel} = window.CdvPurchase;
     useEffect(() => {
         document.addEventListener("deviceready", () => {
             store.verbosity = LogLevel.DEBUG;
