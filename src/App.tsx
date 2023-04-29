@@ -12,7 +12,7 @@ const productId = "pwa_inapp_pro_9_99"
 function App() {
     const [purchasableProducts, setPurchasableProducts] = useState<CdvPurchase.Product[]>([])
     const [productsOwned, setProductsOwned] = useState<Set<CdvPurchase.Product>>()
-    const {store, ProductType, Platform, LogLevel} = window.CdvPurchase;
+
     const updatePurchases = (receipt: CdvPurchase.Receipt) => {
         let productsOwned = new Set<CdvPurchase.Product>();
         let productIdsOwned = new Set<string>();
@@ -20,7 +20,7 @@ function App() {
         receipt.transactions.forEach(transaction => {
             transaction.products.forEach(trProduct => {
                 console.log(`product owned: ${trProduct.id}`);
-                const product = store.get(trProduct.id) as CdvPurchase.Product
+                const product = window.CdvPurchase.store.get(trProduct.id) as CdvPurchase.Product
 
                 productsOwned.add(product)
                 productIdsOwned.add(trProduct.id)
@@ -42,6 +42,14 @@ function App() {
 
     useEffect(() => {
         document.addEventListener("deviceready", () => {
+            console.log("device ready event handler")
+            if(! window.CdvPurchase || ! window.CdvPurchase.store) {
+                console.log(`store object currently not available`)
+                return;
+            }
+
+            console.log(`store object is available`)
+            const {store, ProductType, Platform, LogLevel} = window.CdvPurchase;
             store.verbosity = LogLevel.DEBUG;
 
             store.register([
@@ -84,7 +92,7 @@ function App() {
                 });
         })
 
-    }, [LogLevel.DEBUG, Platform.GOOGLE_PLAY, Platform.APPLE_APPSTORE, ProductType.NON_CONSUMABLE, store])
+    }, [window.CdvPurchase])
 
     /*async function getPurchasedProduct(productId: string) {
         try {
@@ -99,7 +107,7 @@ function App() {
 
     const placeOrderOnNativeStore = (product: CdvPurchase.Product) => {
         console.log(`placing order for productId=${product.id}`)
-        const offer = store.get(product.id, product.platform)?.getOffer();
+        const offer = window.CdvPurchase.store.get(product.id, product.platform)?.getOffer();
         offer?.order()
             .then(result => {
                 if (result) {
