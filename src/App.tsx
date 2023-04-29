@@ -138,8 +138,8 @@ function App() {
         <div className="App">
             <header className="App-header">
                 {Capacitor.isNativePlatform() && <Box>
-                    productsOwned && showOwnedProducts()
-                    purchasableProducts && showPurchasableProducts()
+                    {productsOwned && showOwnedProducts()}
+                    {purchasableProducts && showPurchasableProducts()}
                 </Box>}
                 {!Capacitor.isNativePlatform() && showWebPaymentMethod()}
             </header>
