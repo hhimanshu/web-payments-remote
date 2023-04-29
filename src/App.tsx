@@ -86,7 +86,7 @@ function App() {
                 });
         })
 
-    }, [])
+    }, [window.CdvPurchase.store])
 
     /*async function getPurchasedProduct(productId: string) {
         try {
