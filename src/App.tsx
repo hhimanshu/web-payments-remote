@@ -76,14 +76,15 @@ function App() {
 
             store.initialize([Platform.GOOGLE_PLAY, Platform.APPLE_APPSTORE])
                 .then(() => {
-                    console.log('store is ready', store.products);
-                    setPurchasableProducts(store.products.filter(p => p.canPurchase))
-                    console.log("fetching products")
+                    console.log('all store products', store.products);
+                    let purchasableProducts = store.products.filter(p => p.canPurchase);
+                    console.log('all purchasable products', purchasableProducts);
+                    setPurchasableProducts(purchasableProducts)
                     // getPurchasedProduct(productId).then(() => console.log("products fetched successfully"))
                 });
         })
 
-    }, [])
+    }, [LogLevel.DEBUG, Platform.GOOGLE_PLAY, Platform.APPLE_APPSTORE, ProductType.NON_CONSUMABLE, store])
 
     /*async function getPurchasedProduct(productId: string) {
         try {
