@@ -112,33 +112,39 @@ function App() {
             })
     }
     console.log(`Native Platform? ${Capacitor.isNativePlatform()}`)
+
+    function showOwnedProducts() {
+        return <Box>
+            {Array.from(productsOwned!.values()).map(p => {
+                return <DisplayPurchasedProduct product={p}/>
+            })}
+        </Box>;
+    }
+
+    function showPurchasableProducts() {
+        return <Box>
+            {purchasableProducts
+                .filter(p => p.canPurchase)
+                .map(product => <DisplayPurchasableProduct product={product}
+                                                           onClick={placeOrderOnNativeStore}/>)}
+        </Box>;
+    }
+
+    function showWebPaymentMethod() {
+        return <WebPaymentCard onClick={() => console.log("Sending to stripe")}/>;
+    }
+
     return (
         <div className="App">
             <header className="App-header">
-                <Box>
-                    {Capacitor.isNativePlatform() && productsOwned && <>
-                        <Box>
-                            {Array.from(productsOwned.values()).map(p => {
-                                return <DisplayPurchasedProduct product={p}/>
-                            })}
-
-                        </Box>
-                        purchasableProducts && <Box>
-                        {purchasableProducts
-                            .filter(p => p.canPurchase)
-                            .map(product => <DisplayPurchasableProduct product={product}
-                                                                       onClick={placeOrderOnNativeStore}/>)}
-                    </Box>
-                    </>
-                    }
-
-                </Box>
-                {!Capacitor.isNativePlatform() &&
-                    <WebPaymentCard onClick={() => console.log("Sending to stripe")}/>}
+                {Capacitor.isNativePlatform() && <Box>
+                    productsOwned && showOwnedProducts()
+                    purchasableProducts && showPurchasableProducts()
+                </Box>}
+                {!Capacitor.isNativePlatform() && showWebPaymentMethod()}
             </header>
         </div>
-    );
-
+    )
 }
 
 export default App;
