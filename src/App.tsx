@@ -7,7 +7,8 @@ import WebPaymentCard from "./components/WebPaymentCard";
 import {DisplayPurchasedProduct} from "./store/DisplayPurchasedProduct";
 import Box from "@mui/material/Box";
 
-const productId = "pwa_inapp_pro_9_99"
+const androidProductId = "pwa_inapp_pro_9_99"
+const appleProductId = "pwa_inapp_pro_0_99"
 
 function App() {
     const [purchasableProducts, setPurchasableProducts] = useState<CdvPurchase.Product[]>([])
@@ -55,12 +56,12 @@ function App() {
             store.register([
                 {
                     type: ProductType.NON_CONSUMABLE,
-                    id: productId,
+                    id: androidProductId,
                     platform: Platform.GOOGLE_PLAY,
                 },
                 {
                     type: ProductType.NON_CONSUMABLE,
-                    id: productId,
+                    id: appleProductId,
                     platform: Platform.APPLE_APPSTORE,
                 }
             ]);
