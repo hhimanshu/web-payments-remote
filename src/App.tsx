@@ -43,6 +43,12 @@ function App() {
     useEffect(() => {
         document.addEventListener("deviceready", () => {
             console.log("device ready event handler")
+            if(! window.CdvPurchase || ! window.CdvPurchase.store) {
+                console.log(`store object currently not available`)
+                return;
+            }
+
+            console.log(`store object is available`)
             const {store, ProductType, Platform, LogLevel} = window.CdvPurchase;
             store.verbosity = LogLevel.DEBUG;
 
@@ -86,7 +92,7 @@ function App() {
                 });
         })
 
-    }, [window.CdvPurchase.store])
+    }, [window.CdvPurchase])
 
     /*async function getPurchasedProduct(productId: string) {
         try {
